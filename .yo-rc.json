@@ -10,9 +10,7 @@
     ],
     "pnp-ci": "no-devops",
     "pnp-vetting": [
-      "webpack-analyzer",
-      "stylelint",
-      "csscomb"
+      "webpack-analyzer"
     ],
     "spfxenv": "spo",
     "pnp-testing": [
