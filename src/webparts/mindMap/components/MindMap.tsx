@@ -1,186 +1,14 @@
 import * as React from 'react';
 import styles from './MindMap.module.scss';
 import { IMindMapProps } from './IMindMapProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-import { customizeUtil, MindMapMain, MindMapModuleOpts } from 'mind-map';
 
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
 
+import { Minder } from 'react-mind';
+const draggable = require('react-mind/src/mind.draggable.js');
 
-const HIERARCHY_RULES = {
-  ROOT: {
-    name: 'Root',
-    //backgroundcolor:: '#7EC6E1',
-    getChildren: () => [
-      HIERARCHY_RULES.SALES_MANAGER,
-      HIERARCHY_RULES.SHOW_ROOM,
-      HIERARCHY_RULES.SALES_TEAM
-    ]
-  },
-  SALES_MANAGER: {
-    name: 'Sales Manager',
-    //color: '#fff',
-    //backgroundcolor:: '#616161',
-    getChildren: () => [
-      HIERARCHY_RULES.SHOW_ROOM,
-      HIERARCHY_RULES.SALES_TEAM
-    ]
-  },
-  SHOW_ROOM: {
-    name: 'Show Room',
-    //color: '#fff',
-    //backgroundcolor:: '#989898',
-    getChildren: () => [
-      HIERARCHY_RULES.SALES_TEAM
-    ]
-  },
-  SALES_TEAM: {
-    name: 'Sales Team',
-    //color: '#fff',
-    //backgroundcolor:: '#C6C6C6',
-    getChildren: () => []
-  }
-};
-
-const options: MindMapModuleOpts = {
-  container: 'jsmind_container',
-  //theme: 'normal',
-  theme: 'warning',
-  editable: true,
-  depth: 10,
-  hasInteraction: true,
-  enableDraggable: true,
-  hierarchyRule: HIERARCHY_RULES,
-  // view: {
-  //   hmargin: 100,
-  //   vmargin: 50,
-  //   lineWidth: 2,
-  //   lineColor: '#555'
-  // },
-  // layout: {
-  //   hspace: 30,
-  //   vspace: 20,
-  //   pspace: 13
-  // },
-  // defaultEventHandle: {
-  //   canHandleMouseDown: true,
-  //   canHandleClick: true,
-  //   canHandleDblclick: true
-  // },
-  shortcut: {
-    enable: true,
-    handles: {},
-    mapping: {
-      addchild: 45, // Insert
-      //addbrother: 13, // Enter
-      editnode: 113, // F2
-      delnode: 46, // Delete
-      toggle: 32, // Space
-      left: 37, // Left
-      up: 38, // Up
-      right: 39, // Right
-      down: 40, // Down
-    }
-  },
-};
-
-// const mind = {
-//   "format": "nodeTree",
-//   "data": {
-//     "id": 43,
-//     "topic": "xx",
-//     "selectedType": false, //false,
-//     //"backgroundColor": "#7EC6E1",
-//     "children": [
-//       {
-//         "id": 80,
-//         //"color": "#fff",
-//         "topic": "show room",
-//         "direction": "right",
-//         "selectedType": false, //false, //"Sales Manager",
-//         //"backgroundColor": "#616161",
-//         "children": []
-//       },
-//       {
-//         "id": 44,
-//         //          "color": "#fff",
-//         "topic": "Sales Manager",
-//         "direction": "right",
-//         "selectedType": false, //"Sales Manager",
-//         //          "backgroundColor": "#616161",
-//         "children": [
-//           {
-//             "id": 46,
-//             //            "color": "#fff",
-//             "topic": "Show Room",
-//             "direction": "right",
-//             "selectedType": false, //"Show Room",
-//             //          "backgroundColor": "#989898",
-//             "children": [
-//               {
-//                 "id": 49,
-//                 //            "color": "#fff",
-//                 "topic": "Sales Team C",
-//                 "direction": "right",
-//                 "selectedType": false, //"Sales Team",
-//                 //          "backgroundColor": "#C6C6C6",
-//                 "children": []
-//               },
-//               {
-//                 "id": 51,
-//                 //      "color": "#fff",
-//                 "topic": "AMG",
-//                 "direction": "right",
-//                 "selectedType": false, //"Sales Team",
-//                 //    "backgroundColor": "#C6C6C6",
-//                 "children": []
-//               },
-//               {
-//                 "id": 47,
-//                 //   "color": "#fff",
-//                 "topic": "Sales Team A",
-//                 "direction": "right",
-//                 "selectedType": false, //"Sales Team",
-//                 // "backgroundColor": "#C6C6C6",
-//                 "children": []
-//               },
-//               {
-//                 "id": 48,
-//                 //"color": "#fff",
-//                 "topic": "Sales Team B",
-//                 "direction": "right",
-//                 "selectedType": false, //"Sales Team",
-//                 //"backgroundColor": "#C6C6C6",
-//                 "children": []
-//               },
-//               {
-//                 "id": 50,
-//                 //"color": "#fff",
-//                 "topic": "Sales Team D",
-//                 "direction": "right",
-//                 "selectedType": false, //"Sales Team",
-//                 //"backgroundColor": "#C6C6C6",
-//                 "children": []
-//               }
-//             ]
-//           }
-//         ]
-//       },
-//       {
-//         "id": 45,
-//         //"color": "#fff",
-//         "topic": "Smart",
-//         "direction": "right",
-//         "selectedType": false, //"Sales Manager",
-//         //"backgroundColor": "#616161",
-//         "children": []
-//       }
-//     ]
-//   }
-// };
-
-const mind = {
+const oldmind = {
   "meta": {
     "name": "MindMap",
     "author": "hizzgdev@163.com",
@@ -372,13 +200,67 @@ const mind = {
 };
 
 export default class MindMap extends React.Component<IMindMapProps, {}> {
-  private mindMap: MindMapMain;
-
+  private mindMap: Minder;
+  private _mindContainer: HTMLDivElement;
 
 
   public componentDidMount(): void {
     if (!this.mindMap) {
-      this.mindMap = MindMapMain.show(options, mind);
+      var mind = {
+        "meta":{
+            "name":"demo",
+            "author":"792300489@qq.com",
+            "version":"0.2",
+        },
+        "format":"node_tree",
+        "data":{"id":"root","topic":"mind","children":[
+                {"id":"easy","topic":"Easy","direction":"left","expanded":false,"children":[
+                    {"id":"easy1","topic":"Easy to show"},
+                    {"id":"easy2","topic":"Easy to edit"},
+                    {"id":"easy3","topic":"Easy to store"},
+                    {"id":"easy4","topic":"Easy to embed","children":[
+                        {"id":"easy41","topic":"Easy to show"},
+                        {"id":"easy42","topic":"Easy to edit"},
+                        {"id":"easy43","topic":"Easy to store"},
+                        {"id":"open44","topic":"BSD License","children":[
+                            {"id":"open441","topic":"on GitHub"},
+                            {"id":"open442","topic":"BSD License"}
+                        ]},
+                        {"id":"easy45","topic":"Easy to embed"}
+                    ]}
+                ]},
+                {"id":"open","topic":"Open Source","direction":"right","children":[
+                    {"id":"open1","topic":"on GitHub"},
+                    {"id":"open2","topic":"BSD License","children":[
+                        {"id":"open21","topic":"on GitHub"},
+                        {"id":"open22","topic":"BSD License","children":[
+                            {"id":"open221","topic":"on GitHub"},
+                            {"id":"open222","topic":"BSD License"}
+                        ]}
+                    ]}
+                ]},
+                {"id":"powerful","topic":"Powerful","direction":"right","expanded":false,"children":[
+                    {"id":"powerful1","topic":"Base on Javascript"},
+                    {"id":"powerful2","topic":"Base on HTML5"},
+                    {"id":"powerful3","topic":"Depends on you","expanded":false,"children":[
+                        {"id":"powerful31","topic":"Base on Javascript"},
+                        {"id":"powerful32","topic":"Base on HTML5"},
+                        {"id":"powerful33","topic":"Depends on you"}
+                    ]}
+                ]},
+                {"id":"other","topic":"test node","direction":"left","children":[
+                    {"id":"other1","topic":"I'm from ajax"},
+                    {"id":"other2","topic":"I can do everything"}
+                ]}
+            ]}
+    };
+      var options = {
+        container: this._mindContainer,
+        editable: true,
+        theme: 'primary'
+      };
+      this.mindMap = Minder.show(options, mind);
+
     }
   }
 
@@ -386,87 +268,83 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
     const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
 
 
-const _items: ICommandBarItemProps[] = [
-  {
-    key: 'newItem',
-    text: 'New',
-    cacheKey: 'myCacheKey', // changing this key will invalidate this item's cache
-    onClick: this.addNode,
-    iconProps: { iconName: 'Add' },
-  },
-  {
-    key: 'delete',
-    text: 'Delete',
-    iconProps: { iconName: 'Delete' },
-    onClick: this.removeNode
-  }
-];
+    const _items: ICommandBarItemProps[] = [
+      {
+        key: 'newItem',
+        text: 'New',
+        cacheKey: 'myCacheKey', // changing this key will invalidate this item's cache
+        onClick: this.addNode,
+        iconProps: { iconName: 'Add' },
+      },
+      {
+        key: 'delete',
+        text: 'Delete',
+        iconProps: { iconName: 'Delete' },
+        onClick: this.removeNode
+      }
+    ];
 
-const _overflowItems: ICommandBarItemProps[] = [
-  { key: 'move', text: 'Move to...', onClick: () => console.log('Move to'), iconProps: { iconName: 'MoveToFolder' } },
-  { key: 'copy', text: 'Copy to...', onClick: () => console.log('Copy to'), iconProps: { iconName: 'Copy' } },
-  { key: 'rename', text: 'Rename...', onClick: () => console.log('Rename'), iconProps: { iconName: 'Edit' } },
-];
+    const _overflowItems: ICommandBarItemProps[] = [
+      { key: 'move', text: 'Move to...', onClick: () => console.log('Move to'), iconProps: { iconName: 'MoveToFolder' } },
+      { key: 'copy', text: 'Copy to...', onClick: () => console.log('Copy to'), iconProps: { iconName: 'Copy' } },
+      { key: 'rename', text: 'Rename...', onClick: () => console.log('Rename'), iconProps: { iconName: 'Edit' } },
+    ];
 
-const _farItems: ICommandBarItemProps[] = [
-  {
-    key: 'tile',
-    text: 'Grid view',
-    // This needs an ariaLabel since it's icon-only
-    ariaLabel: 'Grid view',
-    iconOnly: true,
-    iconProps: { iconName: 'Tiles' },
-    onClick: () => console.log('Tiles'),
-  },
-  {
-    key: 'info',
-    text: 'Info',
-    // This needs an ariaLabel since it's icon-only
-    ariaLabel: 'Info',
-    iconOnly: true,
-    iconProps: { iconName: 'Info' },
-    onClick: () => console.log('Info'),
-  },
-];
+    const _farItems: ICommandBarItemProps[] = [
+      {
+        key: 'tile',
+        text: 'Grid view',
+        // This needs an ariaLabel since it's icon-only
+        ariaLabel: 'Grid view',
+        iconOnly: true,
+        iconProps: { iconName: 'Tiles' },
+        onClick: () => console.log('Tiles'),
+      },
+      {
+        key: 'info',
+        text: 'Info',
+        // This needs an ariaLabel since it's icon-only
+        ariaLabel: 'Info',
+        iconOnly: true,
+        iconProps: { iconName: 'Info' },
+        onClick: () => console.log('Info'),
+      },
+    ];
 
 
     return (
       <div className={styles.mindMap}>
         <CommandBar
-        items={_items}
-        overflowItems={_overflowItems}
-        overflowButtonProps={overflowProps}
-        farItems={_farItems}
-        ariaLabel="Use left and right arrow keys to navigate between commands"
-      />
-        <div id="jsmind_container" className={styles.mindMapContainer}>
+          items={_items}
+          overflowItems={_overflowItems}
+          overflowButtonProps={overflowProps}
+          farItems={_farItems}
+          ariaLabel="Use left and right arrow keys to navigate between commands"
+        />
+        <div id="mind_container" ref={(elm) => this._mindContainer = elm} className={styles.mindMapContainer}>
         </div>
       </div>
     );
   }
 
   private removeNode = () => {
-    const selectedNode = this.mindMap.getSelectedNode();
-    const selectedId = selectedNode && selectedNode.id;
+    const selectedNode = this.mindMap.get_selected();
+    this.mindMap.remove_node(selectedNode);
+    // const selectedId = selectedNode && selectedNode.id;
 
-    if (!selectedId) {
-      return;
-    }
-    this.mindMap.removeNode(selectedId);
+    // if (!selectedId) {
+    //   return;
+    // }
+    // this.mindMap.removeNode(selectedId);
   }
 
   private addNode = () => {
-    const selectedNode = this.mindMap.getSelectedNode();
-    if (!selectedNode) {
-      return;
-    }
-
-    const nodeId = customizeUtil.uuid.newid();
-    this.mindMap.addNode(selectedNode, nodeId, "New topic", {});
+    this.mindMap.add_node("sub2", "sub23", "new node", { "background-color": "red" });
+    this.mindMap.set_node_color('sub21', 'green', '#ccc');
   }
 
   private getMindMapData() {
-    const data = this.mindMap.getData().data;
-    console.log('data: ', data);
+    // const data = this.mindMap.getData().data;
+    // console.log('data: ', data);
   }
 }

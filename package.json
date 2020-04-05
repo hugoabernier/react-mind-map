@@ -27,11 +27,12 @@
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/webpack-env": "1.13.1",
+    "lodash.template": ">=4.5.0",
     "mind-map": "^0.2.1",
     "office-ui-fabric-react": "6.189.2",
     "react": "16.8.5",
     "react-dom": "16.8.5",
-    "lodash.template": ">=4.5.0"
+    "react-mind": "^0.1.6"
   },
   "resolutions": {
     "@types/react": "16.8.8"
