@@ -4,290 +4,184 @@ import { IMindMapProps } from './IMindMapProps';
 
 import { CommandBar, ICommandBarItemProps } from 'office-ui-fabric-react/lib/CommandBar';
 import { IButtonProps } from 'office-ui-fabric-react/lib/Button';
+import { IconType } from 'office-ui-fabric-react/lib/Icon';
+import { IImageProps } from 'office-ui-fabric-react/lib/Image';
 
 import { Minder } from 'react-mind';
-const draggable = require('react-mind/src/mind.draggable.js');
 
-const oldmind = {
-  "meta": {
-    "name": "MindMap",
-    "author": "hizzgdev@163.com",
-    "version": "0.2"
-  },
-  "format": "nodeTree",
-  "data": {
-    "id": "root",
-    "topic": "Mind Map",
-    "expanded": true,
-    // "children": []
-    "children": [
-      {
-        "id": "easy",
-        "topic": "Easy",
-        "expanded": false,
-        "direction": "left",
-        "children": [
-          {
-            "id": "easy1",
-            "topic": "Easy to show",
-            "expanded": true
-          },
-          {
-            "id": "easy2",
-            "topic": "Easy to edit",
-            "expanded": true
-          },
-          {
-            "id": "easy3",
-            "topic": "Easy to store",
-            "expanded": true
-          },
-          {
-            "id": "easy4",
-            "topic": "Easy to embed",
-            "expanded": true,
-            "children": [
-              {
-                "id": "easy41",
-                "topic": "Easy to show",
-                "expanded": true
-              },
-              {
-                "id": "easy42",
-                "topic": "Easy to edit",
-                "expanded": true
-              },
-              {
-                "id": "easy43",
-                "topic": "Easy to store",
-                "expanded": true
-              },
-              {
-                "id": "open44",
-                "topic": "BSD License",
-                "expanded": true,
-                "children": [
-                  {
-                    "id": "open441",
-                    "topic": "on GitHub",
-                    "expanded": true
-                  },
-                  {
-                    "id": "open442",
-                    "topic": "BSD License",
-                    "expanded": true
-                  }
-                ]
-              },
-              {
-                "id": "easy45",
-                "topic": "Easy to embed",
-                "expanded": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "open",
-        "topic": "Open Source",
-        "expanded": true,
-        "direction": "right",
-        "children": [
-          {
-            "id": "open1",
-            "topic": "on GitHub",
-            "expanded": true
-          },
-          {
-            "id": "open2",
-            "topic": "BSD License",
-            "expanded": true,
-            "children": [
-              {
-                "id": "open21",
-                "topic": "on GitHub",
-                "expanded": true
-              },
-              {
-                "id": "open22",
-                "topic": "BSD License",
-                "expanded": true,
-                "children": [
-                  {
-                    "id": "open221",
-                    "topic": "on GitHub",
-                    "expanded": true
-                  },
-                  {
-                    "id": "open222",
-                    "topic": "BSD License",
-                    "expanded": true
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "1485b5b3378dcb99",
-            "expanded": true,
-            "background-image": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE4LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDE4OC4xNDkgMTg4LjE0OSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTg4LjE0OSAxODguMTQ5OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPGRlZnM+DQoJCQk8Y2lyY2xlIGlkPSJTVkdJRF8xXyIgY3g9Ijk0LjA3NCIgY3k9Ijk0LjA3NSIgcj0iOTQuMDc0Ii8+DQoJCTwvZGVmcz4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBzdHlsZT0ib3ZlcmZsb3c6dmlzaWJsZTtmaWxsOiNFNkU3RTI7Ii8+DQoJCTxjbGlwUGF0aCBpZD0iU1ZHSURfMl8iPg0KCQkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBzdHlsZT0ib3ZlcmZsb3c6dmlzaWJsZTsiLz4NCgkJPC9jbGlwUGF0aD4NCgkJPHBhdGggc3R5bGU9ImNsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTtmaWxsOiNFQ0MxOUM7IiBkPSJNMTI2LjcwOCwxNTMuOTQ2aC0wLjAyYy0yLjA0MS0xLjU0NS00LjE3OC0yLjkxOS02LjQyOS00LjE1OQ0KCQkJYy0wLjA1OC0wLjAzOC0wLjExNS0wLjA3Ni0wLjE5MS0wLjA5NWMtMTAuNjQ2LTUuODc2LTE3Ljg1Ny0xNy4yMDktMTcuODU3LTMwLjIzOWwtMTYuMTIxLTAuMDc3DQoJCQljMCwxMy4wNjktNy4yNjksMjQuNDU5LTE4LjAxLDMwLjMxNWMwLDAtMC4wMTksMC0wLjAzOCwwLjAxOWMtMi4yNzEsMS4yNC00LjQ0NSwyLjYzMy02LjUwNiw0LjE1OQ0KCQkJYy0xMy4zNTUsOS45NC0yMS45OTcsMjUuODMyLTIxLjk5Nyw0My43NjZoMTA5LjA3QzE0OC42MSwxNzkuNzQsMTQwLjAwNiwxNjMuODg1LDEyNi43MDgsMTUzLjk0NnoiLz4NCgkJPHBhdGggc3R5bGU9ImNsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTtmaWxsOiMxNjhFRjc7IiBkPSJNMTQ4LjYwOSwxOTcuNjI5SDM5LjUzOGMwLTE3LjkzNCw4LjY0Mi0zMy44MjYsMjEuOTk3LTQzLjc2Ng0KCQkJYzIuMDYxLTEuNTI2LDQuMjM1LTIuOTE5LDYuNTA1LTQuMTU5YzAuMDItMC4wMTksMC4wMzktMC4wMTksMC4wMzktMC4wMTljMS43NTUtMC45NzMsMy40MzQtMi4wOCw0Ljk3OS0zLjMzOQ0KCQkJYzUuMzQyLDUuNDc2LDEyLjgwMiw4Ljg3MiwyMS4wNjMsOC44NzJjOC4yNDIsMCwxNS42ODMtMy4zOTYsMjEuMDI0LTguODUzYzEuNTI2LDEuMjU5LDMuMTg3LDIuMzY2LDQuOTIyLDMuMzINCgkJCWMwLjA3NiwwLjAxOSwwLjEzNCwwLjA1NywwLjE5MSwwLjA5NWMyLjI1MSwxLjI0LDQuMzg4LDIuNjE0LDYuNDI5LDQuMTU5aDAuMDJDMTQwLjAwNSwxNjMuODc5LDE0OC42MDksMTc5LjczMywxNDguNjA5LDE5Ny42Mjl6DQoJCQkiLz4NCgkJPHBhdGggc3R5bGU9ImNsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTtmaWxsOiNFQ0MxOUM7IiBkPSJNNTIuMjE3LDM4LjA5MXY0Mi44MzZjMCwyOC45NzYsMjUuNDM3LDUyLjQ2NSw0MS44NTgsNTIuNDY1DQoJCQljMTYuNDE5LDAsNDEuODU4LTIzLjQ4OSw0MS44NTgtNTIuNDY1VjM4LjA5MUg1Mi4yMTd6Ii8+DQoJCTxwYXRoIHN0eWxlPSJjbGlwLXBhdGg6dXJsKCNTVkdJRF8yXyk7ZmlsbDojNDk0ODQ2OyIgZD0iTTEyOS4xMTQsMzAuMjA3Yy05LjEyMy0xMS40MjMtMjIuOTcyLTE4LjcyNi0zOC40NjMtMTguNzI2DQoJCQljLTI3LjUyMSwwLTQ5LjgxLDIyLjk3Mi00OS44MSw1MS4zMDFjMCwxNS4wMzYsNi4yNjcsMjguNTU2LDE2LjI3NCwzNy45MzJjLTIuNTc4LTYuNDctNC4wMTgtMTMuNzIyLTQuMDE4LTIxLjM4DQoJCQljMC0xMi4zMDcsMy43NC0yMy41NzgsOS45NTctMzIuMjQ2YzYuNTk2LDIuOTMyLDE3LjI4NiwzLjk5MywyOS4wMTEsMi4zNzZjMTEuNjI1LTEuNTkyLDIxLjUzMS01LjQzMywyNy4xMTYtMTAuMDA3DQoJCQljMTAuMTg1LDguOTk2LDE2LjgwNiwyMy41MDIsMTYuODA2LDM5Ljg3N2MwLDguMzktMS43MTksMTYuMjc1LTQuODAyLDIzLjE5OWM5LjgzLTQuMDY5LDE3LjA1OC0xOC41NzQsMTcuMDU4LTM1LjgzNQ0KCQkJQzE0OC4yNDMsNDguMjI1LDEzOS45NTQsMzIuOTg3LDEyOS4xMTQsMzAuMjA3eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K",
-            "width": "100",
-            "height": "100"
-          }
-        ]
-      },
-      {
-        "id": "powerful",
-        "topic": "Powerful",
-        "expanded": false,
-        "direction": "right",
-        "children": [
-          {
-            "id": "powerful1",
-            "topic": "Base on Javascript",
-            "expanded": true
-          },
-          {
-            "id": "powerful2",
-            "topic": "Base on HTML5",
-            "expanded": true
-          },
-          {
-            "id": "powerful3",
-            "topic": "Depends on you",
-            "expanded": false,
-            "children": [
-              {
-                "id": "powerful31",
-                "topic": "Base on Javascript",
-                "expanded": true
-              },
-              {
-                "id": "powerful32",
-                "topic": "Base on HTML5",
-                "expanded": true
-              },
-              {
-                "id": "powerful33",
-                "topic": "Depends on you",
-                "expanded": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "other",
-        "topic": "test node",
-        "expanded": true,
-        "direction": "left",
-        "children": [
-          {
-            "id": "other1",
-            "topic": "I'm from ajax",
-            "expanded": true
-          },
-          {
-            "id": "other2",
-            "topic": "I can do everything",
-            "expanded": true
-          }
-        ]
-      }
-    ]
-  }
-};
+import * as strings from 'MindMapWebPartStrings';
+
+require('react-mind/src/mind.draggable.js');
+require('react-mind/src/mind.screenshot.js');
+
+const MINZOOM: number = 1;
+const MAXZOOM: number = 999;
 
 export default class MindMap extends React.Component<IMindMapProps, {}> {
   private mindMap: Minder;
   private _mindContainer: HTMLDivElement;
-
-
   public componentDidMount(): void {
     if (!this.mindMap) {
-      var mind = {
-        "meta":{
-            "name":"demo",
-            "author":"792300489@qq.com",
-            "version":"0.2",
-        },
-        "format":"node_tree",
-        "data":{"id":"root","topic":"mind","children":[
-                {"id":"easy","topic":"Easy","direction":"left","expanded":false,"children":[
-                    {"id":"easy1","topic":"Easy to show"},
-                    {"id":"easy2","topic":"Easy to edit"},
-                    {"id":"easy3","topic":"Easy to store"},
-                    {"id":"easy4","topic":"Easy to embed","children":[
-                        {"id":"easy41","topic":"Easy to show"},
-                        {"id":"easy42","topic":"Easy to edit"},
-                        {"id":"easy43","topic":"Easy to store"},
-                        {"id":"open44","topic":"BSD License","children":[
-                            {"id":"open441","topic":"on GitHub"},
-                            {"id":"open442","topic":"BSD License"}
-                        ]},
-                        {"id":"easy45","topic":"Easy to embed"}
-                    ]}
-                ]},
-                {"id":"open","topic":"Open Source","direction":"right","children":[
-                    {"id":"open1","topic":"on GitHub"},
-                    {"id":"open2","topic":"BSD License","children":[
-                        {"id":"open21","topic":"on GitHub"},
-                        {"id":"open22","topic":"BSD License","children":[
-                            {"id":"open221","topic":"on GitHub"},
-                            {"id":"open222","topic":"BSD License"}
-                        ]}
-                    ]}
-                ]},
-                {"id":"powerful","topic":"Powerful","direction":"right","expanded":false,"children":[
-                    {"id":"powerful1","topic":"Base on Javascript"},
-                    {"id":"powerful2","topic":"Base on HTML5"},
-                    {"id":"powerful3","topic":"Depends on you","expanded":false,"children":[
-                        {"id":"powerful31","topic":"Base on Javascript"},
-                        {"id":"powerful32","topic":"Base on HTML5"},
-                        {"id":"powerful33","topic":"Depends on you"}
-                    ]}
-                ]},
-                {"id":"other","topic":"test node","direction":"left","children":[
-                    {"id":"other1","topic":"I'm from ajax"},
-                    {"id":"other2","topic":"I can do everything"}
-                ]}
-            ]}
-    };
-      var options = {
-        container: this._mindContainer,
-        editable: true,
-        theme: 'primary'
-      };
-      this.mindMap = Minder.show(options, mind);
-
+      this.renderMindMap();
     }
+  }
+
+  private renderMindMap() {
+    var mind = {
+      "meta": {
+        "name": "demo",
+        "author": "792300489@qq.com",
+        "version": "0.2",
+      },
+      "format": "node_tree",
+      "data": {
+        "id": "root", "topic": "mind", "children": [
+          {
+            "id": "easy", "topic": "Easy", "direction": "left", "expanded": false, "children": [
+              { "id": "easy1", "topic": "Easy to show" },
+              { "id": "easy2", "topic": "Easy to edit" },
+              { "id": "easy3", "topic": "Easy to store" },
+              {
+                "id": "easy4", "topic": "Easy to embed", "children": [
+                  { "id": "easy41", "topic": "Easy to show" },
+                  { "id": "easy42", "topic": "Easy to edit" },
+                  { "id": "easy43", "topic": "Easy to store" },
+                  {
+                    "id": "open44", "topic": "BSD License", "children": [
+                      { "id": "open441", "topic": "on GitHub" },
+                      { "id": "open442", "topic": "BSD License" }
+                    ]
+                  },
+                  { "id": "easy45", "topic": "Easy to embed" }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "open", "topic": "Open Source", "direction": "right", "children": [
+              { "id": "open1", "topic": "on GitHub" },
+              {
+                "id": "open2", "topic": "BSD License", "children": [
+                  { "id": "open21", "topic": "on GitHub" },
+                  {
+                    "id": "open22", "topic": "BSD License", "children": [
+                      { "id": "open221", "topic": "on GitHub" },
+                      { "id": "open222", "topic": "BSD License" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "powerful", "topic": "Powerful", "direction": "right", "expanded": false, "children": [
+              { "id": "powerful1", "topic": "Base on Javascript" },
+              { "id": "powerful2", "topic": "Base on HTML5" },
+              {
+                "id": "powerful3", "topic": "Depends on you", "expanded": false, "children": [
+                  { "id": "powerful31", "topic": "Base on Javascript" },
+                  { "id": "powerful32", "topic": "Base on HTML5" },
+                  { "id": "powerful33", "topic": "Depends on you" }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "other", "topic": "test node", "direction": "left", "children": [
+              { "id": "other1", "topic": "I'm from ajax" },
+              { "id": "other2", "topic": "I can do everything" }
+            ]
+          }
+        ]
+      }
+    };
+    var options = {
+      container: this._mindContainer,
+      editable: true,
+      theme: 'primary'
+    };
+    this.mindMap = Minder.show(options, mind);
+
+    // Store the dimensions of the container
+    const dims: DOMRectList | ClientRectList = this._mindContainer.parentElement.getClientRects();
+    const dim: DOMRect = dims[0] as DOMRect;
+    console.log("Container dimensions", dim);
+    const mindSize = this.mindMap.view.size;
+    console.log("mindSize", mindSize);
+    this._mindContainer.style.width = `${dim.width}px`;
+    this._mindContainer.style.height = `${dim.height}px`;
+
+    const scale: number = dim.width / mindSize.w;
+    console.log("Scale", scale);
+    this._mindContainer.style.transform = `scale(${scale})`;
+    this._mindContainer.style.marginLeft = `-${(scale * dim.width) / 2}px`;
+    this._mindContainer.style.marginTop = `-${((scale * dim.height) / 2) - 40}px`;
+    //this._mindContainer.style.zoom = `${scale}`;
+    this.mindMap.resize();
+    // Change the width
+    // svg.setAttribute("width", "100%");
+    // svg.removeAttribute("height");
+    // svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    // svg.setAttribute("role", "image");
   }
 
   public render(): React.ReactElement<IMindMapProps> {
     const overflowProps: IButtonProps = { ariaLabel: 'More commands' };
 
 
+    const subtopicIcon: string = require('./assets/SubTopic.svg');
+
     const _items: ICommandBarItemProps[] = [
       {
-        key: 'newItem',
-        text: 'New',
+        key: 'addNode',
+        text: strings.AddToolbarButton,
+        title: strings.AddToolbarButtonTitle,
+        iconOnly: true,
         cacheKey: 'myCacheKey', // changing this key will invalidate this item's cache
-        onClick: this.addNode,
+        onClick: this.addSubTopic,
         iconProps: { iconName: 'Add' },
+        // iconProps: {
+        //   iconType: IconType.Image,
+        //   imageProps: {
+        //     src: subtopicIcon
+        //   }
+        // },
       },
       {
-        key: 'delete',
-        text: 'Delete',
-        iconProps: { iconName: 'Delete' },
+        key: 'removeNode',
+        text: strings.RemoveToolbarButton,
+        title: strings.RemoveToolbarButtonTitle,
+        iconOnly: true,
+        iconProps: { iconName: 'Remove' },
         onClick: this.removeNode
+      },
+      {
+        key: 'zoomIn',
+        text: strings.ZoomInToolbarButton,
+        iconOnly: true,
+        iconProps: { iconName: 'zoomIn' },
+        onClick: this.zoomIn,
+        disabled: this.mindMap && this.mindMap.view && this.mindMap.view.actualZoom >= MAXZOOM
+      },
+      {
+        key: 'zoomOut',
+        text: strings.ZoomOutToolbarButton,
+        iconOnly: true,
+        iconProps: { iconName: 'zoomOut' },
+        onClick: this.zoomOut,
+        disabled: this.mindMap && this.mindMap.view && this.mindMap.view.actualZoom <= MINZOOM
       }
+
     ];
 
     const _overflowItems: ICommandBarItemProps[] = [
-      { key: 'move', text: 'Move to...', onClick: () => console.log('Move to'), iconProps: { iconName: 'MoveToFolder' } },
-      { key: 'copy', text: 'Copy to...', onClick: () => console.log('Copy to'), iconProps: { iconName: 'Copy' } },
-      { key: 'rename', text: 'Rename...', onClick: () => console.log('Rename'), iconProps: { iconName: 'Edit' } },
+      {
+        key: 'shoot',
+        text: strings.SnapshotToolbarButton,
+        title: strings.SnapshotToolbarButtonTitle,
+        iconProps: { iconName: 'Camera' },
+        onClick: this.getScreenshot
+      }
     ];
 
     const _farItems: ICommandBarItemProps[] = [
@@ -298,7 +192,7 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
         ariaLabel: 'Grid view',
         iconOnly: true,
         iconProps: { iconName: 'Tiles' },
-        onClick: () => console.log('Tiles'),
+        onClick: this.resize,
       },
       {
         key: 'info',
@@ -307,7 +201,7 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
         ariaLabel: 'Info',
         iconOnly: true,
         iconProps: { iconName: 'Info' },
-        onClick: () => console.log('Info'),
+        onClick: this.getMindMapData,
       },
     ];
 
@@ -319,32 +213,65 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
           overflowItems={_overflowItems}
           overflowButtonProps={overflowProps}
           farItems={_farItems}
-          ariaLabel="Use left and right arrow keys to navigate between commands"
+          ariaLabel={strings.CommandBarAriaLabel}
         />
-        <div id="mind_container" ref={(elm) => this._mindContainer = elm} className={styles.mindMapContainer}>
+        <div ref={(elm) => this._mindContainer = elm} className={styles.mindMapContainer} style={{ height: 500 }}>
         </div>
       </div>
     );
   }
 
   private removeNode = () => {
-    const selectedNode = this.mindMap.get_selected();
-    this.mindMap.remove_node(selectedNode);
-    // const selectedId = selectedNode && selectedNode.id;
-
-    // if (!selectedId) {
-    //   return;
-    // }
-    // this.mindMap.removeNode(selectedId);
+    const selectedNode = this.mindMap.get_selected_node();
+    if (selectedNode) {
+      const parentNode = selectedNode.parent;
+      this.mindMap.remove_node(selectedNode);
+      this.mindMap.select_node(parentNode);
+    }
   }
 
-  private addNode = () => {
-    this.mindMap.add_node("sub2", "sub23", "new node", { "background-color": "red" });
-    this.mindMap.set_node_color('sub21', 'green', '#ccc');
+  private addSubTopic = () => {
+    const selectedNode = this.mindMap.get_selected_node();
+
+    const newNode = this.mindMap.add_node(selectedNode, "sub23", "New node", {});
+    console.log("New node", newNode);
+    this.mindMap.select_node(newNode);
+    this.mindMap.begin_edit(newNode);
+    //this.mindMap.set_node_color('sub21', 'green', '#ccc');
   }
 
-  private getMindMapData() {
-    // const data = this.mindMap.getData().data;
-    // console.log('data: ', data);
+  private getScreenshot = () => {
+    this.mindMap.screenshot.shootDownload();
+  }
+
+  private getMindMapData = () => {
+    console.log("Get mind map data");
+    const data = this.mindMap.get_data().data;
+    console.log('data: ', data);
+  }
+
+  private zoomIn = () => {
+    const { view } = this.mindMap;
+    if (view.actualZoom < MAXZOOM) {
+      view.zoomIn();
+      console.log("Zoom", view.actualZoom);
+    }
+  }
+
+  private zoomOut = () => {
+    const { view } = this.mindMap;
+    if (view.actualZoom > MINZOOM) {
+      view.zoomOut();
+      console.log("Zoom", view.actualZoom);
+    }
+  }
+
+  private resize = () => {
+    this._mindContainer.style.width = `300px`;
+    this._mindContainer.style.height = `300px`;
+
+    this._mindContainer.style.transform = `scale(1)`;
+    //this._mindContainer.style.zoom = `1`;
+    this.mindMap.resize();
   }
 }

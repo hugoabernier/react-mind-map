@@ -12,7 +12,7 @@ import MindMap from './components/MindMap';
 import { IMindMapProps } from './components/IMindMapProps';
 
 export interface IMindMapWebPartProps {
-  description: string;
+  theme: string;
 }
 
 export default class MindMapWebPart extends BaseClientSideWebPart <IMindMapWebPartProps> {
@@ -21,7 +21,7 @@ export default class MindMapWebPart extends BaseClientSideWebPart <IMindMapWebPa
     const element: React.ReactElement<IMindMapProps> = React.createElement(
       MindMap,
       {
-        description: this.properties.description
+        description: this.properties.theme
       }
     );
 
@@ -47,8 +47,8 @@ export default class MindMapWebPart extends BaseClientSideWebPart <IMindMapWebPa
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('theme', {
+                  label: strings.ThemeFieldLabel
                 })
               ]
             }
