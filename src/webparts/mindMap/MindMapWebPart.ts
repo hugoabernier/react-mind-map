@@ -3,7 +3,9 @@ import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneDropdown,
+  PropertyPaneDropdownOptionType
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
@@ -15,13 +17,13 @@ export interface IMindMapWebPartProps {
   theme: string;
 }
 
-export default class MindMapWebPart extends BaseClientSideWebPart <IMindMapWebPartProps> {
+export default class MindMapWebPart extends BaseClientSideWebPart<IMindMapWebPartProps> {
 
   public render(): void {
     const element: React.ReactElement<IMindMapProps> = React.createElement(
       MindMap,
       {
-        description: this.properties.theme
+        theme: this.properties.theme
       }
     );
 
@@ -47,8 +49,27 @@ export default class MindMapWebPart extends BaseClientSideWebPart <IMindMapWebPa
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('theme', {
-                  label: strings.ThemeFieldLabel
+                PropertyPaneDropdown('theme', {
+                  label: strings.ThemeFieldLabel,
+                  options: [
+                    { key: "office", text: "Office" },
+                    { key: "primary", text: "Primary" },
+                    { key: "warning", text: "Warning" },
+                    { key: "danger", text: "Danger" },
+                    { key: "success", text: "Success" },
+                    { key: "info", text: "Info" },
+                    { key: "greensea", text: "Greensea" },
+                    { key: "nephrite", text: "Nephrite" },
+                    { key: "belizehole", text: "Belizehole" },
+                    { key: "wisteria", text: "Wisteria" },
+                    { key: "asphalt", text: "Asphalt" },
+                    { key: "orange", text: "Orange" },
+                    { key: "pumpkin", text: "Pumpkin" },
+                    { key: "pomegranate", text: "Pomegranate" },
+                    { key: "clouds", text: "Clouds" },
+                    { key: "asbestos", text: "Asbestos" }
+                  ],
+                  selectedKey: this.properties.theme
                 })
               ]
             }

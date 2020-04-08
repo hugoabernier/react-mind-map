@@ -1,32 +1,28 @@
 @import "~office-ui-fabric-react/dist/sass/References.scss";
 
 .mindMap {
-  color:inherit;
-  //min-height: 400px;
   overflow: hidden;
+  background-color:red!important;
 }
 
 .mindMapContainer {
   :global() {
-    /* You can add global styles to this file, and also import other style files */
-
     /* stylelint-disable */
     /*
- * Released under BSD License
- * Copyright (c) 2014-2015 hizzgdev@163.com
- *
- * Project Home:
- *   https://github.com/hizzgdev/jsmind/
- */
+    * Released under BSD License
+    * Copyright (c) 2014-2015 hizzgdev@163.com
+    *
+    * Project Home:
+    *   https://github.com/hizzgdev/jsmind/
+    */
 
     /* important section */
     .jsmind-inner {
       position: relative;
       overflow: auto;
-      // width: 100%;
-      // height: 100%;
-    } /*box-shadow:0 0 2px #000;*/
-    .jsmind-inner {
+      width: 100%;
+      height: 100%;
+      background-color: green!important;
       moz-user-select: -moz-none;
       -moz-user-select: none;
       -o-user-select: none;
@@ -48,6 +44,7 @@
       z-index: 2;
       background-color: rgba(0, 0, 0, 0);
     } /*background color is necessary*/
+
     jmnode {
       position: absolute;
       cursor: default;
@@ -55,7 +52,9 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+
     }
+
     jmexpander {
       position: absolute;
       width: 11px;
@@ -85,14 +84,15 @@
         color: #333;
       }
 
-      &[class~="selected"] {
+      &[class~='selected'] {
         background-color: #11f;
         color: #fff;
         box-shadow: 2px 2px 8px #000;
       }
 
-      &[class~="root"] {
-        font-size: 14px;
+      &[class~='root'] {
+        font-size: 21px;
+        font-weight:bold;
       }
     }
 
@@ -109,13 +109,33 @@
         border-radius: 3px;
         font-size: 16px;
 
-        &[class~="root"] {
+        &[class~='root'] {
           font-size: 21px;
         }
       }
     }
+
+    /* Office */
+    jmnodes[class='theme-office'] {
+      jmnode {
+        background-color: $ms-color-themePrimary;
+        color: $ms-color-white;
+        border-color: $ms-color-themePrimary;
+
+        &:hover {
+          background-color: $ms-color-themeDark;
+          border-color: $ms-color-themeDark;
+        }
+        &[class~='selected'] {
+          background-color: $ms-color-themeDarker;
+          color: $ms-color-white;
+        }
+      }
+    }
+
+
     /* primary theme */
-    jmnodes[class="theme-primary"] {
+    jmnodes[class='theme-primary'] {
       jmnode {
         background-color: #428bca;
         color: #fff;
@@ -125,22 +145,15 @@
           background-color: #3276b1;
           border-color: #285e8e;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #f1c40f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* warning theme */
-    jmnodes[class="theme-warning"] {
+    jmnodes[class='theme-warning'] {
       jmnode {
         background-color: #f0ad4e;
         border-color: #eea236;
@@ -150,22 +163,15 @@
           background-color: #ed9c28;
           border-color: #d58512;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* danger theme */
-    jmnodes[class="theme-danger"] {
+    jmnodes[class='theme-danger'] {
       jmnode {
         background-color: #d9534f;
         border-color: #d43f3a;
@@ -175,22 +181,15 @@
           background-color: #d2322d;
           border-color: #ac2925;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* success theme */
-    jmnodes[class="theme-success"] {
+    jmnodes[class='theme-success'] {
       jmnode {
         background-color: #5cb85c;
         border-color: #4cae4c;
@@ -200,22 +199,15 @@
           background-color: #47a447;
           border-color: #398439;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* info theme */
-    jmnodes[class="theme-info"] {
+    jmnodes[class='theme-info'] {
       jmnode {
         background-color: #5dc0de;
         border-color: #46b8da;
@@ -225,22 +217,15 @@
           background-color: #39b3d7;
           border-color: #269abc;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* greensea theme */
-    jmnodes[class="theme-greensea"] {
+    jmnodes[class='theme-greensea'] {
       jmnode {
         background-color: #1abc9c;
         color: #fff;
@@ -248,21 +233,14 @@
         &:hover {
           background-color: #16a085;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
     /* normal theme */
-    jmnodes[class="theme-normal"] {
+    jmnodes[class='theme-normal'] {
       jmnode {
         background-color: #a8c6dc;
         color: #000;
@@ -271,21 +249,15 @@
           background-color: #fff;
           color: #000;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #fff;
           color: #000;
-        }
-        &[class~="root"] {
-        }
-        jmexpander {
-        }
-        jmexpander:hover {
         }
       }
     }
 
     /* nephrite theme */
-    jmnodes[class="theme-nephrite"] {
+    jmnodes[class='theme-nephrite'] {
       jmnode {
         background-color: #2ecc71;
         color: #fff;
@@ -293,22 +265,15 @@
         &:hover {
           background-color: #27ae60;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* belizehole theme */
-    jmnodes[class="theme-belizehole"] {
+    jmnodes[class='theme-belizehole'] {
       jmnode {
         background-color: #3498db;
         color: #fff;
@@ -316,22 +281,15 @@
         &:hover {
           background-color: #2980b9;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
     /* wisteria theme */
-    jmnodes[class="theme-wisteria"] {
+    jmnodes[class='theme-wisteria'] {
       jmnode {
         background-color: #9b59b6;
         color: #fff;
@@ -339,138 +297,121 @@
         &:hover {
           background-color: #8e44ad;
         }
-        &[class~="selected"] {
+        &[class~='selected'] {
           background-color: #11f;
           color: #fff;
         }
-        &[class~="root"] {
-        }
-      }
-
-      jmexpander {
-      }
-      jmexpander:hover {
       }
     }
 
-    // /* asphalt theme */
-    // jmnodes.theme-asphalt jmnode {
-    //   background-color: #34495e;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-asphalt jmnode:hover {
-    //   background-color: #2c3e50;
-    // }
-    // jmnodes.theme-asphalt jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-asphalt jmnode.root {
-    // }
-    // jmnodes.theme-asphalt jmexpander {
-    // }
-    // jmnodes.theme-asphalt jmexpander:hover {
-    // }
+    /* asphalt theme */
+    jmnodes[class='theme-asphalt'] {
+      jmnode {
+        background-color: #34495e;
+        color: #fff;
 
-    // /* orange theme */
-    // jmnodes.theme-orange jmnode {
-    //   background-color: #f1c40f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-orange jmnode:hover {
-    //   background-color: #f39c12;
-    // }
-    // jmnodes.theme-orange jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-orange jmnode.root {
-    // }
-    // jmnodes.theme-orange jmexpander {
-    // }
-    // jmnodes.theme-orange jmexpander:hover {
-    // }
+        &:hover {
+          background-color: #2c3e50;
+        }
 
-    // /* pumpkin theme */
-    // jmnodes.theme-pumpkin jmnode {
-    //   background-color: #e67e22;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-pumpkin jmnode:hover {
-    //   background-color: #d35400;
-    // }
-    // jmnodes.theme-pumpkin jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-pumpkin jmnode.root {
-    // }
-    // jmnodes.theme-pumpkin jmexpander {
-    // }
-    // jmnodes.theme-pumpkin jmexpander:hover {
-    // }
+        &[class~='.selected'] {
+          background-color: #11f;
+          color: #fff;
+        }
+      }
+    }
 
-    // /* pomegranate theme */
-    // jmnodes.theme-pomegranate jmnode {
-    //   background-color: #e74c3c;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-pomegranate jmnode:hover {
-    //   background-color: #c0392b;
-    // }
-    // jmnodes.theme-pomegranate jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-pomegranate jmnode.root {
-    // }
-    // jmnodes.theme-pomegranate jmexpander {
-    // }
-    // jmnodes.theme-pomegranate jmexpander:hover {
-    // }
+    /* orange theme */
+    jmnodes[class='theme-orange'] {
+      jmnode {
+        background-color: #f1c40f;
+        color: #fff;
 
-    // /* clouds theme */
-    // jmnodes.theme-clouds jmnode {
-    //   background-color: #ecf0f1;
-    //   color: #333;
-    // }
-    // jmnodes.theme-clouds jmnode:hover {
-    //   background-color: #bdc3c7;
-    // }
-    // jmnodes.theme-clouds jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-clouds jmnode.root {
-    // }
-    // jmnodes.theme-clouds jmexpander {
-    // }
-    // jmnodes.theme-clouds jmexpander:hover {
-    // }
+        &:hover {
+          background-color: #f39c12;
+        }
 
-    // /* asbestos theme */
-    // jmnodes.theme-asbestos jmnode {
-    //   background-color: #95a5a6;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-asbestos jmnode:hover {
-    //   background-color: #7f8c8d;
-    // }
-    // jmnodes.theme-asbestos jmnode.selected {
-    //   background-color: #11f;
-    //   color: #fff;
-    // }
-    // jmnodes.theme-asbestos jmnode.root {
-    // }
-    // jmnodes.theme-asbestos jmexpander {
-    // }
-    // jmnodes.theme-asbestos jmexpander:hover {
-    // }
+        &[class~='selected'] {
+          background-color: #11f;
+          color: #fff;
+        }
+      }
+    }
 
-    // jmnode[class~='selected'] {
-    //   background-color: #11f ;
-    //   color: #fff ;
-    //   box-shadow: 2px 2px 8px #000 ;
-    // }
+    /* pumpkin theme */
+    jmnodes[class='theme-pumpkin'] {
+      jmnode {
+        background-color: #e67e22;
+        color: #fff;
+
+        &:hover {
+          background-color: #d35400;
+        }
+
+        &[class~='selected'] {
+          background-color: #11f;
+          color: #fff;
+        }
+      }
+    }
+
+    /* pomegranate theme */
+    jmnodes[class='theme-pomegranate'] {
+      jmnode {
+        background-color: #e74c3c;
+        color: #fff;
+
+        &:hover {
+          background-color: #c0392b;
+        }
+
+        &[class~='selected'] {
+          background-color: #11f;
+          color: #fff;
+        }
+      }
+    }
+
+    /* clouds theme */
+    jmnodes[class='theme-clouds'] {
+      jmnode {
+        background-color: #ecf0f1;
+        color: #333;
+
+        &:hover {
+          background-color: #bdc3c7;
+        }
+
+        &[class='selected'] {
+          background-color: #11f;
+          color: #fff;
+        }
+      }
+    }
+
+
+    /* asbestos theme */
+    jmnodes[class='theme-asbestos'] {
+     jmnode {
+      background-color: #95a5a6;
+      color: #fff;
+
+      &:hover {
+        background-color: #7f8c8d;
+      }
+
+      &[class~='selected'] {
+        background-color: #11f;
+        color: #fff;
+      }
+     }
+    }
   }
+
+  // jmnode[class~='selected'] {
+  //   background-color: #11f;
+  //   color: #fff;
+  //   box-shadow: 2px 2px 8px #000;
+  // }
+
 }

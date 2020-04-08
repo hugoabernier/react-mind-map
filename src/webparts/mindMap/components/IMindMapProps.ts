@@ -1,3 +1,3 @@
 export interface IMindMapProps {
-  description: string;
+  theme: string;
 }

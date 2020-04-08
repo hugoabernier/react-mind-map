@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import styles from './MindMap.module.scss';
 import { IMindMapProps } from './IMindMapProps';
 
@@ -19,110 +20,17 @@ const MAXZOOM: number = 999;
 
 export default class MindMap extends React.Component<IMindMapProps, {}> {
   private mindMap: Minder;
-  private _mindContainer: HTMLDivElement;
+  private _mindMapContainer: HTMLDivElement;
   public componentDidMount(): void {
-    if (!this.mindMap) {
-      this.renderMindMap();
-    }
+    this.renderMindMap();
   }
 
-  private renderMindMap() {
-    var mind = {
-      "meta": {
-        "name": "demo",
-        "author": "792300489@qq.com",
-        "version": "0.2",
-      },
-      "format": "node_tree",
-      "data": {
-        "id": "root", "topic": "mind", "children": [
-          {
-            "id": "easy", "topic": "Easy", "direction": "left", "expanded": false, "children": [
-              { "id": "easy1", "topic": "Easy to show" },
-              { "id": "easy2", "topic": "Easy to edit" },
-              { "id": "easy3", "topic": "Easy to store" },
-              {
-                "id": "easy4", "topic": "Easy to embed", "children": [
-                  { "id": "easy41", "topic": "Easy to show" },
-                  { "id": "easy42", "topic": "Easy to edit" },
-                  { "id": "easy43", "topic": "Easy to store" },
-                  {
-                    "id": "open44", "topic": "BSD License", "children": [
-                      { "id": "open441", "topic": "on GitHub" },
-                      { "id": "open442", "topic": "BSD License" }
-                    ]
-                  },
-                  { "id": "easy45", "topic": "Easy to embed" }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "open", "topic": "Open Source", "direction": "right", "children": [
-              { "id": "open1", "topic": "on GitHub" },
-              {
-                "id": "open2", "topic": "BSD License", "children": [
-                  { "id": "open21", "topic": "on GitHub" },
-                  {
-                    "id": "open22", "topic": "BSD License", "children": [
-                      { "id": "open221", "topic": "on GitHub" },
-                      { "id": "open222", "topic": "BSD License" }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "powerful", "topic": "Powerful", "direction": "right", "expanded": false, "children": [
-              { "id": "powerful1", "topic": "Base on Javascript" },
-              { "id": "powerful2", "topic": "Base on HTML5" },
-              {
-                "id": "powerful3", "topic": "Depends on you", "expanded": false, "children": [
-                  { "id": "powerful31", "topic": "Base on Javascript" },
-                  { "id": "powerful32", "topic": "Base on HTML5" },
-                  { "id": "powerful33", "topic": "Depends on you" }
-                ]
-              }
-            ]
-          },
-          {
-            "id": "other", "topic": "test node", "direction": "left", "children": [
-              { "id": "other1", "topic": "I'm from ajax" },
-              { "id": "other2", "topic": "I can do everything" }
-            ]
-          }
-        ]
-      }
-    };
-    var options = {
-      container: this._mindContainer,
-      editable: true,
-      theme: 'primary'
-    };
-    this.mindMap = Minder.show(options, mind);
-
-    // Store the dimensions of the container
-    const dims: DOMRectList | ClientRectList = this._mindContainer.parentElement.getClientRects();
-    const dim: DOMRect = dims[0] as DOMRect;
-    console.log("Container dimensions", dim);
-    const mindSize = this.mindMap.view.size;
-    console.log("mindSize", mindSize);
-    this._mindContainer.style.width = `${dim.width}px`;
-    this._mindContainer.style.height = `${dim.height}px`;
-
-    const scale: number = dim.width / mindSize.w;
-    console.log("Scale", scale);
-    this._mindContainer.style.transform = `scale(${scale})`;
-    this._mindContainer.style.marginLeft = `-${(scale * dim.width) / 2}px`;
-    this._mindContainer.style.marginTop = `-${((scale * dim.height) / 2) - 40}px`;
-    //this._mindContainer.style.zoom = `${scale}`;
-    this.mindMap.resize();
-    // Change the width
-    // svg.setAttribute("width", "100%");
-    // svg.removeAttribute("height");
-    // svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    // svg.setAttribute("role", "image");
+  public componentDidUpdate(prevProps: IMindMapProps, prevState: {}): void {
+    if (prevProps.theme != this.props.theme)
+    {
+      this.mindMap.set_theme(this.props.theme);
+    }
+    //this.renderMindMap();
   }
 
   public render(): React.ReactElement<IMindMapProps> {
@@ -175,24 +83,16 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
     ];
 
     const _overflowItems: ICommandBarItemProps[] = [
+
+    ];
+
+    const _farItems: ICommandBarItemProps[] = [
       {
         key: 'shoot',
         text: strings.SnapshotToolbarButton,
         title: strings.SnapshotToolbarButtonTitle,
         iconProps: { iconName: 'Camera' },
         onClick: this.getScreenshot
-      }
-    ];
-
-    const _farItems: ICommandBarItemProps[] = [
-      {
-        key: 'tile',
-        text: 'Grid view',
-        // This needs an ariaLabel since it's icon-only
-        ariaLabel: 'Grid view',
-        iconOnly: true,
-        iconProps: { iconName: 'Tiles' },
-        onClick: this.resize,
       },
       {
         key: 'info',
@@ -205,7 +105,6 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
       },
     ];
 
-
     return (
       <div className={styles.mindMap}>
         <CommandBar
@@ -215,7 +114,7 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
           farItems={_farItems}
           ariaLabel={strings.CommandBarAriaLabel}
         />
-        <div ref={(elm) => this._mindContainer = elm} className={styles.mindMapContainer} style={{ height: 500 }}>
+        <div ref={(elm) => this._mindMapContainer = elm} className={styles.mindMapContainer}>
         </div>
       </div>
     );
@@ -267,11 +166,131 @@ export default class MindMap extends React.Component<IMindMapProps, {}> {
   }
 
   private resize = () => {
-    this._mindContainer.style.width = `300px`;
-    this._mindContainer.style.height = `300px`;
+    this._mindMapContainer.style.width = `300px!important`;
+    this._mindMapContainer.style.height = `300px!important`;
 
-    this._mindContainer.style.transform = `scale(1)`;
+    //this._mindContainer.style.transform = `scale(1)`;
     //this._mindContainer.style.zoom = `1`;
     this.mindMap.resize();
+  }
+
+  private renderMindMap() {
+    if (this.mindMap) {
+      return;
+    }
+
+      var mind = {
+        "meta": {
+          "name": "demo",
+          "author": "792300489@qq.com",
+          "version": "0.2",
+        },
+        "format": "node_tree",
+        "data": {
+          "id": "root", "topic": "Mind Map", "children": [
+            {
+              "id": "easy", "topic": "Easy", "direction": "left", "expanded": false, "children": [
+                { "id": "easy1", "topic": "Easy to show" },
+                { "id": "easy2", "topic": "Easy to edit" },
+                { "id": "easy3", "topic": "Easy to store" },
+                {
+                  "id": "easy4", "topic": "Easy to embed", "children": [
+                    { "id": "easy41", "topic": "Easy to show" },
+                    { "id": "easy42", "topic": "Easy to edit" },
+                    { "id": "easy43", "topic": "Easy to store" },
+                    {
+                      "id": "open44", "topic": "BSD License", "children": [
+                        { "id": "open441", "topic": "on GitHub" },
+                        { "id": "open442", "topic": "BSD License" }
+                      ]
+                    },
+                    { "id": "easy45", "topic": "Easy to embed" }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "open", "topic": "Open Source", "direction": "right", "children": [
+                { "id": "open1", "topic": "on GitHub" },
+                {
+                  "id": "open2", "topic": "BSD License", "children": [
+                    { "id": "open21", "topic": "on GitHub" },
+                    {
+                      "id": "open22", "topic": "BSD License", "children": [
+                        { "id": "open221", "topic": "on GitHub" },
+                        { "id": "open222", "topic": "BSD License" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "powerful", "topic": "Powerful", "direction": "right", "expanded": false, "children": [
+                { "id": "powerful1", "topic": "Base on Javascript" },
+                { "id": "powerful2", "topic": "Base on HTML5" },
+                {
+                  "id": "powerful3", "topic": "Depends on you", "expanded": false, "children": [
+                    { "id": "powerful31", "topic": "Base on Javascript" },
+                    { "id": "powerful32", "topic": "Base on HTML5" },
+                    { "id": "powerful33", "topic": "Depends on you" }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "other", "topic": "test node", "direction": "left", "children": [
+                { "id": "other1", "topic": "I'm from ajax" },
+                { "id": "other2", "topic": "I can do everything" }
+              ]
+            }
+          ]
+        }
+      };
+      var options = {
+        container: this._mindMapContainer,
+        editable: true,
+        theme: this.props.theme
+      };
+      this.mindMap = Minder.show(options, mind);
+
+      // Store the dimensions of the container
+      const parent: HTMLElement = this._mindMapContainer.parentElement;
+      console.log("Parent", parent);
+      const dims: DOMRectList | ClientRectList = parent.getClientRects();
+      console.log("Dims", dims);
+      const dim: DOMRect = dims[0] as DOMRect;
+      console.log("Dim", dim);
+      const mindSize = this.mindMap.view.size;
+      console.log("mindSize", mindSize);
+      this._mindMapContainer.style.width = `${dim.width}px`;
+      this._mindMapContainer.style.height = `${dim.height}px`;
+      parent.style.height = `${mindSize.h+40}px`;
+
+      // const scale: number = dim.width / mindSize.w;
+      // console.log("Scale", scale);
+      // this._mindContainer.style.transform = `scale(${scale})`;
+      // this._mindContainer.style.marginLeft = `-${(scale * dim.width) / 2}px`;
+      // this._mindContainer.style.marginTop = `-${((scale * dim.height) / 2) - 40}px`;
+      //this._mindContainer.style.zoom = `${scale}`;
+      // this.mindMap.resize();
+      // Change the width
+      // svg.setAttribute("width", "100%");
+      // svg.removeAttribute("height");
+      // svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      // svg.setAttribute("role", "image");
+
+      //this._mindMapContainer.style.width = `300px`;
+      //this._mindMapContainer.style.height = `300px`;
+      this.resize();
+
+      // const mindInner: HTMLDivElement = this._mindContainer.firstElementChild as HTMLDivElement;
+      // console.log("Mindinner", mindInner);
+
+      // mindInner.style.width = `300px`;
+      // mindInner.style.height = `300px`;
+      // console.log("Resizing");
+      // this.mindMap.resize();
+      // console.log("After resize");
   }
 }
