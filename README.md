@@ -1,5 +1,8 @@
 # react-mind-map
 
+TODO: Rewrite using https://github.com/my-mind/my-mind.github.io/tree/master/src
+
+
 This project uses [React](https://reactjs.org).
 
 > This is where you include your project's documentation.
