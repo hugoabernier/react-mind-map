@@ -1,7 +1,7 @@
 # react-mind-map
 
 TODO: Rewrite using https://github.com/my-mind/my-mind.github.io/tree/master/src
-
+http://my-mind.github.io/?url=examples%2Ffeatures.mymind
 
 This project uses [React](https://reactjs.org).
 
